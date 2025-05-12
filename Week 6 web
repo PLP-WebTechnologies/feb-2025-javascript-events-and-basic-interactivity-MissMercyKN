@@ -1,0 +1,213 @@
+Html 5 code 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive JavaScript Project</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Interactive JavaScript Project</h1>
+
+    <!-- Button to change text or color -->
+    <button id="myButton">Click me</button>
+
+    <!-- Hover effect button -->
+    <button id="hoverButton">Hover over me</button>
+
+    <!-- Keypress detection -->
+    <input type="text" id="keyInput" placeholder="Press a key">
+    <p id="keyMessage">Key Pressed: </p>
+
+    <!-- Double click and long press -->
+    <button id="longPressButton">Double-click or Long press me</button>
+
+    <!-- Image Gallery -->
+    <div class="gallery">
+        <img id="galleryImage" src="image1.jpg" alt="Gallery Image">
+        <button id="nextImage">Next Image</button>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs">
+        <button class="tab" data-target="content1">Tab 1</button>
+        <button class="tab" data-target="content2">Tab 2</button>
+    </div>
+    <div id="content1" class="content">
+        <p>Content for Tab 1</p>
+    </div>
+    <div id="content2" class="content" style="display: none;">
+        <p>Content for Tab 2</p>
+    </div>
+
+    <!-- Form with validation -->
+    <form id="myForm">
+        <input type="text" id="name" required placeholder="Enter your name">
+        <input type="email" id="email" required placeholder="Enter your email">
+        <input type="password" id="password" required placeholder="Enter your password">
+        <button type="submit">Submit</button>
+    </form>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
+
+
+style.css code
+/* Basic styles */
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    padding: 20px;
+}
+
+button {
+    margin: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: lightblue;
+}
+
+input {
+    padding: 10px;
+    margin: 10px;
+    font-size: 16px;
+}
+
+.content {
+    margin: 20px;
+}
+
+#galleryImage {
+    width: 300px;
+    height: auto;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+.animated {
+    animation: pulse 1s ease;
+}
+
+#usernameFeedback {
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+/* Additional styling for form and validation messages */
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+}
+
+form input {
+    width: 80%;
+    max-width: 400px;
+}
+
+
+script.js
+// Button Click - Changes text and color
+document.getElementById('myButton').addEventListener('click', function() {
+    this.textContent = "You clicked me!";
+    this.style.backgroundColor = 'green';
+});
+
+// Hover Effect - Change background color
+document.getElementById('hoverButton').addEventListener('mouseover', function() {
+    this.style.backgroundColor = 'yellow';
+});
+document.getElementById('hoverButton').addEventListener('mouseout', function() {
+    this.style.backgroundColor = '';
+});
+
+// Keypress Detection - Display key pressed
+document.getElementById('keyInput').addEventListener('keydown', function(event) {
+    document.getElementById('keyMessage').textContent = "Key Pressed: " + event.key;
+});
+
+// Double-click and Long press detection
+let clickTime = 0;
+document.getElementById('longPressButton').addEventListener('click', function() {
+    clickTime++;
+    if (clickTime === 2) {
+        alert("Double-clicked!");
+        clickTime = 0;
+    }
+    setTimeout(function() { clickTime = 0; }, 500); // Reset if no double-click within 500ms
+});
+
+document.getElementById('longPressButton').addEventListener('mousedown', function() {
+    setTimeout(function() {
+        alert('Long press detected');
+    }, 1000); // 1 second long press
+});
+
+// Image Gallery - Change image on click
+let images = ['image1.jpg', 'image2.jpg', 'image3.jpg'];
+let currentImage = 0;
+document.getElementById('nextImage').addEventListener('click', function() {
+    currentImage = (currentImage + 1) % images.length;
+    document.getElementById('galleryImage').src = images[currentImage];
+});
+
+// Tabs - Switch content on click
+document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', function() {
+        const target = this.getAttribute('data-target');
+        document.querySelectorAll('.content').forEach(content => {
+            content.style.display = 'none';
+        });
+        document.getElementById(target).style.display = 'block';
+    });
+});
+
+// Form Validation
+document.getElementById('myForm').addEventListener('submit', function(event) {
+    const name = document.getElementById('name').value.trim();
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (name === "") {
+        alert("Name is required!");
+        event.preventDefault();
+        return;
+    }
+    if (!emailRegex.test(email)) {
+        alert("Please enter a valid email address.");
+        event.preventDefault();
+        return;
+    }
+    if (password.length < 8) {
+        alert("Password must be at least 8 characters long.");
+        event.preventDefault();
+        return;
+    }
+});
+
+// Real-time feedback for username field
+document.getElementById('name').addEventListener('input', function() {
+    const feedback = document.getElementById('usernameFeedback');
+    if (this.value.length < 5) {
+        feedback.textContent = "Name must be at least 5 characters.";
+        feedback.style.color = 'red';
+    } else {
+        feedback.textContent = "Name looks good!";
+        feedback.style.color = 'green';
+    }
+});
+
+
